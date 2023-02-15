@@ -1,0 +1,202 @@
+# Java 2023 春季学习
+
+### 一.薄弱点
+
+1. ##### jdk、jre、jvm区别
+
+   java源代码是filename.java文件，通过 **jdk java** 开发工具包对其进行编译，形成filename.class字节码文件，而**jre**中包含了一些系统库以及java程序运行环境，如jvm。jvm是java虚拟机进程，可以将字节码文件转换为对应机器的指令代码，所以java程序代码只需要编写一遍。
+
+2. ##### 值传递与引用传递
+
+   java当中全部都是值传递。对于基本类型，值传递。引用类型时，其实传递的是引用类型地址的一个副本，所以看起来像是引用传递，事实上是值传递。可以参考掘金关注。
+
+3. ##### static关键字
+
+   ​		**在了解java中的static之前，有必要知道java程序的加载过程。java程序在编译形成字节码文件之后，首先会把main函数所在的类加载到内存中（<u>*在java中，要想使用一个类的静态变量或者静态函数，必须先把这个类加载到内存中，加载不是初始化，加载的是类，初始化的是对象*</u>），然后初始化这个类当中的static变量，然后执行static main（）方法，在一个类被调用或者初始化时，也会遵循上述规则。当一个已经被加载在内存中的类没有任何一个实例，也没有静态方法、变量的调用时，类会被卸载，即清出内存。**
+
+   [参考地址](https://blog.csdn.net/yabay2208/article/details/71171207)
+
+   类加载、初始化过程：先类加载到内存中，初始化静态变量并加载到栈中，运行静态代码块、运行非静态代码块，运行初始化方法。
+
+   区分静态变量、静态方法、静态代码块、静态内部类。其中静态内部类可用于单例模式：
+
+   ```java
+   public class Singleton {
+       private Singleton() {}
+   
+       private static class SingletonHolder {
+           public static final Singleton instance = new Singleton();
+       }
+   
+       public static Singleton getInstance() {
+           return SingletonHolder.instance;
+       }
+   }
+   作者：沉默王二
+   链接：https://juejin.cn/post/6844904180365131783
+   来源：稀土掘金
+   ```
+
+4. 成员内部类、局部内部类、匿名内部类和静态内部类
+
+   + 成员内部类：相当于外部类的一个属性，外部类先加载，内部类才能加载，内部类持有外部类的引用，内部类应当借助外部类进行申请，如
+
+     ```java
+     Body.Heart heart = new Heart();
+     ```
+
+      另外，非静态内部类中不应当有静态变量和方法。
+
+   + 局部内部类： 在外部类某一个方法内定义的类，不能用static、修饰符。是否持有外部类的引用视情况而定。
+
+   + 匿名内部类： 若此类只用于某个特定的地方，即可使用匿名内部类简化开发，同样是不能有static、访问修饰符。
+
+   + 静态内部类： java中只有内部类允许是静态的，事实上静态内部相当于一个独立的类，只是逻辑上属于外部类，静态内部类不持有外部类的应用，只可以访问外部类的静态变量，若要访问外部类的变量，则应通过实例的方式，即传递类地址值。
+
+     [参考链接1](https://blog.csdn.net/yabay2208/article/details/71171207)          [参考链接2](https://www.runoob.com/w3cnote/java-inner-class-intro.html#:~:text=%E5%8C%BF%E5%90%8D%E5%86%85%E9%83%A8%E7%B1%BB%E6%98%AF%E5%94%AF,%E5%AE%9E%E7%8E%B0%E6%88%96%E6%98%AF%E9%87%8D%E5%86%99%E3%80%82)
+
+5. java中override和overload之间的别
+
+   override是重写，即子类对父类方法的重写，要注意的是，重写方法不能抛出新的检查异常或者比被重写方法申明更加宽泛的异常。例如： 父类的一个方法申明了一个检查异常 IOException，但是在重写这个方法的时候不能抛出 Exception 异常，因为 Exception 是 IOException 的父类，抛出 IOException 异常或者 IOException 的子类异常。在面向对象原则里，重写意味着可以重写任何现有方法。利用super.move()可以调用父类的move（）方法。
+
+   ```java
+   class Animal{
+      public void move(){
+         System.out.println("动物可以移动");
+      }
+   }
+    
+   class Dog extends Animal{
+      public void move(){
+         System.out.println("狗可以跑和走");
+      }
+   }
+    
+   public class TestDog{
+      public static void main(String args[]){
+         Animal a = new Animal(); // Animal 对象
+         Animal b = new Dog(); // Dog 对象
+    
+         a.move();// 执行 Animal 类的方法
+    
+         b.move();//执行 Dog 类的方法
+      }
+   }
+   ```
+
+   在上面的例子中可以看到，尽管 b 属于 Animal 类型，但是它运行的是 Dog 类的 move方法。
+
+   这是由于在编译阶段，只是检查参数的引用类型。
+
+   然而在运行时，Java 虚拟机(JVM)指定对象的类型并且运行该对象的方法。
+
+   因此在上面的例子中，之所以能编译成功，是因为 Animal 类中存在 move 方法，然而运行时，运行的是特定对象的方法。
+
+   ```
+   class Animal{
+      public void move(){
+         System.out.println("动物可以移动");
+      }
+   }
+    
+   class Dog extends Animal{
+      public void move(){
+         System.out.println("狗可以跑和走");
+      }
+      public void bark(){
+         System.out.println("狗可以吠叫");
+      }
+   }
+    
+   public class TestDog{
+      public static void main(String args[]){
+         Animal a = new Animal(); // Animal 对象
+         Animal b = new Dog(); // Dog 对象
+    
+         a.move();// 执行 Animal 类的方法
+         b.move();//执行 Dog 类的方法
+         b.bark();
+      }
+   }
+   ```
+
+   该程序将抛出一个编译错误，因为b的引用类型Animal没有bark方法。
+
+   overload是同一个类里对同一个方法名进行多写。
+
+6. 关于java中继承的几个特性
+
+   java中的继承使用的关键字为extends和implements。其中extends继承是类之间的继承，子类默认继承了父类非private属性和方法，父类属性可以直接用，父类方法可以重写，可以扩展自己的属性和方法。java当中并不支持多继承，即一个类继承多个类，但支持多重继承，即A继承B，B又继承C。
+
+   在构造一个子类时，必须先构造一个父类，所以在子类构造方法中，会自动隐式调用父类无参构造方法，如果在子类构造方法中，显示的调用了父类的有参构造，则不会再自动隐式调用父类的无参构造方法。子类并不会继承父类的构造方法，而是用super(int a);对父类参数进行初始化。所以子类要使用父类的参数时，必须通过子类构造函数调用父类构造函数，对父类进行初始化。
+
+   ```java
+   class SuperClass {
+     private int n;
+     SuperClass(){
+       System.out.println("SuperClass()");
+     }
+     SuperClass(int n) {
+       System.out.println("SuperClass(int n)");
+       this.n = n;
+     }
+   }
+   // SubClass 类继承
+   class SubClass extends SuperClass{
+     private int n;
+     
+     SubClass(){ // 自动调用父类的无参数构造器
+       System.out.println("SubClass");
+     }  
+     
+     public SubClass(int n){ 
+       super(300);  // 调用父类中带有参数的构造器
+       System.out.println("SubClass(int n):"+n);
+       this.n = n;
+     }
+   }
+   // SubClass2 类继承
+   class SubClass2 extends SuperClass{
+     private int n;
+     
+     SubClass2(){
+       super(300);  // 调用父类中带有参数的构造器
+       System.out.println("SubClass2");
+     }  
+     
+     public SubClass2(int n){ // 自动调用父类的无参数构造器
+       System.out.println("SubClass2(int n):"+n);
+       this.n = n;
+     }
+   }
+   public class TestSuperSub{
+     public static void main (String args[]){
+       System.out.println("------SubClass 类继承------");
+       SubClass sc1 = new SubClass();
+       SubClass sc2 = new SubClass(100); 
+       System.out.println("------SubClass2 类继承------");
+       SubClass2 sc3 = new SubClass2();
+       SubClass2 sc4 = new SubClass2(200); 
+     }
+   }
+   结果
+   ------SubClass 类继承------
+   SuperClass()
+   SubClass
+   SuperClass(int n)
+   SubClass(int n):100
+   ------SubClass2 类继承------
+   SuperClass(int n)
+   SubClass2
+   SuperClass()
+   SubClass2(int n):200
+   ```
+
+   还要注意，final代表最终的意思，如果是final class则不能被继承；如果是final 方法，则不能重写（public/private final）。
+
+7. java中的接口注意事项
+
+   @override注解作用：只能用来修饰方法，告诉编译器此方法一定是重写父类某一方法， 若没有重写父类的某一方法，则直接报错，用于避免一些低级错误。
+
+   
+
