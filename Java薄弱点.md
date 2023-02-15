@@ -198,5 +198,46 @@
 
    @override注解作用：只能用来修饰方法，告诉编译器此方法一定是重写父类某一方法， 若没有重写父类的某一方法，则直接报错，用于避免一些低级错误。
 
-   
 
+
+
+### 二. Git及Github学习记录
+
+1. 创建、推送流程：
+
+   + 先在本地生成一个ssh秘钥：
+
+     ```bash
+     ssh-keygen -t rsa -C "your_email@youremail.com"
+     ```
+
+     后面的`your_email@youremail.com`改为你在github上注册的邮箱，之后会要求确认路径和输入密码，我们这使用默认的一路回车就行。成功的话会在`~/`下生成`.ssh`文件夹，进去，打开`id_rsa.pub`，复制里面的`key`（即C盘下面的user用户里面）。回到github上，进入 Account Settings（账户配置），左边选择SSH Keys，Add SSH Key,title随便填，粘贴在你电脑上生成的key。验证是否成功，
+
+     ```
+     $ ssh -T git@github.com
+     ```
+
+     如果是第一次的会提示是否continue，输入yes就会看到：You've successfully authenticated, but GitHub does not provide shell access 。这就表示已成功连上github。接下来我们要做的就是把本地仓库传到github上去，在此之前还需要设置username和email，因为github每次commit都会记录他们。
+
+     ```bash
+     定制所有仓库提交时的个人信息，不加--global则是对此仓库起效
+     $ git config --global user.name "yourname"
+     $ git config --global user.email "youremail"
+     
+     ```
+
+     添加远程仓库，也可以直接打开.git文件夹下config文本里面修改remote。
+
+     ```bash
+     git remote add origin url
+     ```
+
+     提交流程：
+
+     ```bash
+     git add .   git add *.java等
+     git commit -m 'message'
+     git push origin master   其中master是分支名，可用git checkout othermaster切换分支
+     ```
+
+     
