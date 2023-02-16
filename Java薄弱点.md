@@ -198,6 +198,12 @@ some changes two
 7. java中的接口注意事项
 
    @override注解作用：只能用来修饰方法，告诉编译器此方法一定是重写父类某一方法， 若没有重写父类的某一方法，则直接报错，用于避免一些低级错误。
+   
+   
+
+
+
+
 
 
 
@@ -236,9 +242,56 @@ some changes two
      提交流程：
 
      ```bash
-     git add .   git add *.java等
-     git commit -m 'message'
-     git push origin master   其中master是分支名，可用git checkout othermaster切换分支
+     $ git add .   git add *.java等
+     $ git commit -m 'message'
+     $ git push origin master   其中master是分支名，可用git checkout othermaster切换分支
+     #注意，git push失败是有成本的，如果push失败，commit版本会被退回，之后再commit不会覆盖！！
      ```
 
-     
+2. 下载、下拉、分支合并、冲突解决流程
+
+   下载指令：
+
+   ```bash
+   git clone url
+   ```
+
+   fetch + merge = pull 指令
+
+   ```bash
+   #该指令用于从远程仓库拉取本地没有的数据
+   $git fetch origin
+   #该指令将远程分支提取更新到当前分支
+   $git merge origin/master
+   
+$ git pull origin master
+   ```
+
+   git diff指令详解：
+   
+   ```bash
+   #显示工作区和暂存区的差异：
+   git diff filename
+   
+   #显示暂存区和上一次提交（head区）的差异：
+   git diff --cached filename
+   
+   #显示工作区和版本库（head区）的差异：
+git diff HEAD filename
+   
+   #显示两次提交之间的差异：没看懂
+   $ git diff [first-branch]...[second-branch]
+   ```
+   
+   版本回退指令：
+   
+   ```bash
+   #查看历史版本
+   git reflog
+   
+   #回退版本
+   git reset --hard 序号
+   ```
+   
+    
+
