@@ -264,12 +264,10 @@ some changes two
    #该指令将远程分支提取更新到当前分支
    $git merge origin/master
    
-$ git pull origin master
+   $ git pull origin master
    ```
-
+   ```
    git diff指令详解：
-   
-   ```bash
    #显示工作区和暂存区的差异：
    git diff filename
    
@@ -277,14 +275,14 @@ $ git pull origin master
    git diff --cached filename
    
    #显示工作区和版本库（head区）的差异：
-git diff HEAD filename
+   git diff HEAD filename
    
    #显示两次提交之间的差异：没看懂
    $ git diff [first-branch]...[second-branch]
    ```
-   
+
    版本回退指令：
-   
+
    ```bash
    #查看历史版本
    git reflog
@@ -292,6 +290,35 @@ git diff HEAD filename
    #回退版本
    git reset --hard 序号
    ```
-   
-    
+
+​    分支基本操作：
+
+```bash
+创建分支：
+git branch -b branchname
+创建并直接切换分支
+git checkout -b branchname
+切换分支
+git checkout branchname
+
+删除分支：
+git branch -d branchname
+
+直接分支合并，合并之后还需要add-commit
+git merge branchname
+如果merge失败，需要手动去打开冲突的文件，有------->head 的提示
+									==========
+									<<<<<<<<
+									
+合并并直接提交，可以插入合并信息：（更为推荐）
+git merge --no-ff -m "modify readme.md with no-ff" A
+```
+
+接管分支操作：
+
+```
+在对文件进行修改时，突然被要求接管其他分支开发，但此时自己的branch暂时不能commit，不能进行分支切换，可以通过git stash隐藏本分支的工作现场，之后切回本分支的时候，利用git stash pop进行恢复。注意如果是新建文件的话一定要add，注意这里的文件问题！！暂时不懂，可以参考github。
+```
+
+
 
