@@ -320,5 +320,19 @@ git merge --no-ff -m "modify readme.md with no-ff" A
 在对文件进行修改时，突然被要求接管其他分支开发，但此时自己的branch暂时不能commit，不能进行分支切换，可以通过git stash隐藏本分支的工作现场，之后切回本分支的时候，利用git stash pop进行恢复。注意如果是新建文件的话一定要add，注意这里的文件问题！！暂时不懂，可以参考github。
 ```
 
+多人协同开发：
 
+一般来说，master是用来确定最终版本，用来上线的，用作开发的一般是dev分支。现在具体讲讲怎么多人在线协同。首先每个人都应该在自己的环境中确定一个dev分支，可以为这个分支直接绑定远程分支：
+
+```
+git branch --set-upstream-to=origin/dev dev
+```
+
+也可以不绑定，但每次push或者pull的时候都需要指定远程分支。在某一位同事第一次push dev分支的时候，远程github会自动创建一个分支。然后每个同事都把远程dev分支clone或者pull下来，最好是pull。然后创建一个dev分支即可进行开发。当出现冲突时，需要手动pull一下，在本地进行合并，如果不能自动合并，则需要手动打开进行合并，然后再add-commit-push。最好是在开发之前，先pull一下。
+
+上线操作也是一样的，利用将远程devpull到本地dev，再切换到本地master合并本地dev，在将本地master push即可。
+
+完结！！！
+
+[参考github链接，非常详细](https://github.com/Masterpaopao/Git-And-Github/blob/master/Git%E9%AB%98%E9%98%B6/Git%E9%AB%98%E9%98%B6%E5%AD%A6%E4%B9%A0.md)
 
