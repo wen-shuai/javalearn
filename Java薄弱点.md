@@ -1,6 +1,5 @@
 # Java 2023 春季学习
-
-
+some changes
 ### 一.薄弱点
 
 1. ##### jdk、jre、jvm区别
