@@ -1,11 +1,10 @@
 package learn;
-public class Animal implements test{
-    @Override
+public class Animal implements test,Alsotest{
+    
     public void eat(){
         System.out.println("------eat------");
     }
 
-    @Override 
     public void sleep(){
         System.out.println("------sleep------");
     }
