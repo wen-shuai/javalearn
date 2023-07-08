@@ -236,12 +236,16 @@ some changes two
      添加远程仓库，也可以直接打开.git文件夹下config文本里面修改remote。
 
      ```bash
+     #这里的url指的就是远程仓库的ssh地址，git remote add的意思就是，给url起个别名，叫origin
+     #之后在用到url繁长的需要时都可以用origin来代替，
      git remote add origin url
      ```
 
      提交流程：
 
      ```bash
+      #这里切记一定要去到根目录下面，即能够看到.git文件。否则提交不上
+
      $ git add .   git add *.java等
      $ git commit -m 'message'
      $ git push origin master   其中master是分支名，可用git checkout othermaster切换分支
@@ -254,6 +258,7 @@ some changes two
 
    ```bash
    git clone url
+   不需要在这之前或者之后git init
    ```
 
    fetch + merge = pull 指令
